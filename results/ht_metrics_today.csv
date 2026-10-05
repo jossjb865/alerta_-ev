@@ -1,7 +1,4 @@
 match_id,date,competition_id,season_id,status,utc_date,home_id,home_name,away_id,away_name,competition_name,home_matches_sample,home_xG_HT,home_xGA_HT,home_Shots_On_Target_HT_For,home_Shots_On_Target_HT_Against,home_Over_1.0_HT_Pct,away_matches_sample,away_xG_HT,away_xGA_HT,away_Shots_On_Target_HT_For,away_Shots_On_Target_HT_Against,away_Over_1.0_HT_Pct
-mt_746350090,2026-10-05T16:30:00.000Z,comp_6267,sn_9670721,finished,2026-10-05T16:30:00.000Z,tm_53474,Sweden U21,tm_88397,North Macedonia U21,,1.0,,,1.0,2.0,,1.0,,,0.0,3.0,
-mt_837906650,2026-10-05T16:15:00.000Z,comp_6267,sn_9670721,finished,2026-10-05T16:15:00.000Z,tm_86694,Italy U21,tm_70034,Poland U21,,4.0,,,2.75,1.0,,0.0,,,,,
-mt_371803640,2026-10-05T16:00:00.000Z,comp_29967,sn_4570744,postponed,2026-10-05T16:00:00.000Z,tm_306565,Rwanda,tm_53251,Kenya,,0.0,,,,,,0.0,,,,,
-mt_514267467,2026-10-05T16:00:00.000Z,comp_08840,sn_8453035,finished,2026-10-05T16:00:00.000Z,tm_99440,Serbia U21,tm_77402,Russia U21,,0.0,,,,,,0.0,,,,,
-mt_159933891,2026-10-05T16:00:00.000Z,comp_574977,sn_4571664,finished,2026-10-05T16:00:00.000Z,tm_94680,Cyprus,tm_65386,Latvia,,1.0,0.53,0.36,3.0,3.0,,1.0,0.11,0.59,0.0,2.0,
-mt_517544293,2026-10-05T16:00:00.000Z,comp_573792,sn_1300764,finished,2026-10-05T16:00:00.000Z,tm_2229,Fana,tm_8802488,Asane Fotball 2,,0.0,,,,,,0.0,,,,,
+mt_206050582,2026-10-05T22:00:00.000Z,comp_4540,sn_5721417,scheduled,2026-10-05T22:00:00.000Z,tm_85905,Vélez Sarsfield,tm_311845,Platense,,14.0,0.602,0.467,1.857,1.786,,13.0,0.272,0.572,1.462,2.077,
+mt_467606010,2026-10-05T22:00:00.000Z,comp_4540,sn_5721417,scheduled,2026-10-05T22:00:00.000Z,tm_63492,Estudiantes de La Plata,tm_2098602,Gimnasia y Esgrima Mendoza,,14.0,0.767,0.402,3.0,0.857,,13.0,0.266,0.316,1.769,2.231,
+mt_739319225,2026-10-05T22:00:00.000Z,comp_193547,sn_7202912,scheduled,2026-10-05T22:00:00.000Z,tm_414674,Martinique,tm_41885,El Salvador,,1.0,,,3.0,2.0,,1.0,,,1.0,4.0,

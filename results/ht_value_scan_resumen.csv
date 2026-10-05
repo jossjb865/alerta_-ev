@@ -1,7 +1,4 @@
 match_id,liga,local,visitante,xg_proyectado_ht,prob_sistema,estado,motivo
-mt_746350090,comp_6267,Sweden U21,North Macedonia U21,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_837906650,comp_6267,Italy U21,Poland U21,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_371803640,comp_29967,Rwanda,Kenya,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_514267467,comp_08840,Serbia U21,Russia U21,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_159933891,comp_574977,Cyprus,Latvia,0.8,,DESCARTADO,R1 xG HT 1.12/0.47 <= 1.45
-mt_517544293,comp_573792,Fana,Asane Fotball 2,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_206050582,comp_4540,Vélez Sarsfield,Platense,0.96,,DESCARTADO,R1 xG HT 1.17/0.74 <= 1.45
+mt_467606010,comp_4540,Estudiantes de La Plata,Gimnasia y Esgrima Mendoza,0.88,,DESCARTADO,R1 xG HT 1.08/0.67 <= 1.45
+mt_739319225,comp_193547,Martinique,El Salvador,,,DESCARTADO,R1 xG HT nan/nan <= 1.45

@@ -1,0 +1,57 @@
+name: thestatsapi-daily-ht-scan
+
+on:
+  schedule:
+    - cron: "30 6 * * *"        # 06:30 UTC diario (ajusta a tu zona/pre-partidos)
+  workflow_dispatch:            # ejecución manual desde la pestaña Actions
+    inputs:
+      simulate:
+        description: "Ejecutar en modo simulación (sin API key)"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write               # para commitear los CSVs al repo
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Scanner HT + EV+
+        env:
+          THESTATSAPI_KEY: ${{ secrets.THESTATSAPI_KEY }}
+          THESTATSAPI_SIMULATE: ${{ github.event.inputs.simulate || 'false' }}
+        run: python thestatsapi_scan.py
+
+      - name: Publicar resultados (artifacts)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ht-scan-results-${{ github.run_number }}
+          path: |
+            ht_metrics_today.csv
+            ht_value_scan_resumen.csv
+            ht_value_alertas.csv
+          retention-days: 30
+
+      - name: Commitear CSVs al repo (historial diario)
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir -p results
+          cp ht_metrics_today.csv ht_value_scan_resumen.csv ht_value_alertas.csv results/ 2>/dev/null || true
+          git add results/*.csv
+          git diff --cached --quiet || git commit -m "scan HT $(date -u +%F)"
+          git push

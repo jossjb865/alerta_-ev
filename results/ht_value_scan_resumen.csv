@@ -1,5 +1,38 @@
-match_id,liga,local,visitante,xg_proyectado_ht,prob_sistema,estado,motivo,cuota,fuente_cuota,prob_implicita,ventaja
-mt_sim1,Demo League,Local 1,Visitante 1,2.01,0.6541,DESCARTADO,R2 freq 57.8/84.3% <= 65.0%,,,,
-mt_sim2,Demo League,Local 2,Visitante 2,1.68,0.622,SIN_VALOR,R3 edge 6.34% < 7%,1.79,simulada,0.5587,6.34
-mt_sim3,Demo League,Local 3,Visitante 3,1.71,0.5763,DESCARTADO,R2 freq 71.6/56.9% <= 65.0%,,,,
-mt_sim4,Demo League,Local 4,Visitante 4,1.94,0.7032,SIN_VALOR,R3 edge 3.21% < 7%,1.49,simulada,0.6711,3.21
+match_id,liga,local,visitante,xg_proyectado_ht,prob_sistema,estado,motivo
+mt_649201265,comp_8998,Nacional,Montevideo City Torque,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_206050582,comp_4540,Vélez Sarsfield,Platense,0.96,,DESCARTADO,R1 xG HT 1.17/0.74 <= 1.45
+mt_467606010,comp_4540,Estudiantes de La Plata,Gimnasia y Esgrima Mendoza,0.88,,DESCARTADO,R1 xG HT 1.08/0.67 <= 1.45
+mt_739319225,comp_193547,Martinique,El Salvador,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_981801669,comp_193547,Cuba,Saint Kitts and Nevis,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_465110196,comp_5537,Nueva Chicago,Deportivo Maipú,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_024212198,comp_4540,Deportivo Riestra,Central Córdoba,1.37,,DESCARTADO,R1 xG HT 1.92/0.82 <= 1.45
+mt_890295974,comp_193547,Guadeloupe,Saint Lucia,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_890549773,comp_29967,Liechtenstein,Gibraltar,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_987702907,comp_574977,Montenegro,Armenia,1.06,,DESCARTADO,R1 xG HT 1.65/0.48 <= 1.45
+mt_376651432,comp_574977,Romania,Sweden,1.55,,DESCARTADO,R1 xG HT 0.68/2.43 <= 1.45
+mt_893320776,comp_574977,Bosnia & Herzegovina,Poland,1.49,,DESCARTADO,R1 xG HT 1.19/1.78 <= 1.45
+mt_734415699,comp_574977,Northern Ireland,Georgia,1.17,,DESCARTADO,R1 xG HT 1.77/0.56 <= 1.45
+mt_734415633,comp_574977,Ukraine,Hungary,1.09,,DESCARTADO,R1 xG HT 0.85/1.34 <= 1.45
+mt_159946756,comp_574977,Italy,Türkiye,2.07,,DESCARTADO,R1 xG HT 1.18/2.96 <= 1.45
+mt_376651205,comp_574977,France,Belgium,1.95,,DESCARTADO,R1 xG HT 0.60/3.29 <= 1.45
+mt_733713074,comp_0976,Córdoba,CD Tenerife,0.0,,DESCARTADO,R1 xG HT 0.00/0.00 <= 1.45
+mt_206036991,comp_193547,Bermuda,Saint Lucia,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_150540337,comp_193547,Guadeloupe,Barbados,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_982887821,comp_964638,Lyn 1896 FK II,Råde,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_209868230,comp_9715,Moss FK,Kongsvinger,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_746350090,comp_6267,Sweden U21,North Macedonia U21,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_837906650,comp_6267,Italy U21,Poland U21,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_371803640,comp_29967,Rwanda,Kenya,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_514267467,comp_08840,Serbia U21,Russia U21,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_159933891,comp_574977,Cyprus,Latvia,0.8,,DESCARTADO,R1 xG HT 1.12/0.47 <= 1.45
+mt_517544293,comp_573792,Fana,Asane Fotball 2,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_371807440,comp_29967,Mauritius,Sri Lanka,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_364712288,comp_6267,Montenegro U21,Armenia U21,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_023480222,comp_08840,Ukraine U21,Albania U21,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_514275822,comp_29967,Uganda,DR Congo,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_370311400,comp_302043,Odds BK II,Viking FK II,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_982106200,comp_29967,Japan,New Zealand,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_468756214,comp_29967,Ecuador,Panama,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_206036938,comp_193547,Nicaragua,Dominican Republic,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_981878730,comp_4540,Estudiantes de Río Cuarto,Racing Club,0.84,,DESCARTADO,R1 xG HT 0.83/0.85 <= 1.45
+mt_739319219,comp_193547,Costa Rica,Haiti,,,DESCARTADO,R1 xG HT nan/nan <= 1.45

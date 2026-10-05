@@ -3,7 +3,7 @@
 """
 TheStatsAPI — Scanner diario de métricas HT + Alertas EV+ (Over 1.0 HT)
 ========================================================================
-Pipeline completo, en un solo archivo, listo para GitHub Actions:
+Pipeline completo, datos en vivo desde API TheStatsAPI únicamente.
 
   1. GET /football/matches?date_from=hoy&date_to=hoy      -> partidos del día
   2. Por cada partido: historial HT de temporada actual (condición local/visit.)
@@ -11,12 +11,13 @@ Pipeline completo, en un solo archivo, listo para GitHub Actions:
      (overview.expected_goals.first_half, shots.shots_on_target.first_half)
   3. Cuota Over 1.0 HT: GET /football/matches/{id}/odds -> total_goals["1.0"].over
   4. Filtros EV+ (xG proyectado > 1.45 ambas direcciones, freq > 65%, edge >= 7%)
-  5. Salida: ht_metrics_today.csv, ht_value_alertas.csv, ht_value_scan_resumen.csv
+  5. Top 10 partidos Over 0.5 HT enviados a Telegram cada 2 horas
+  6. Salida: ht_metrics_today.csv, ht_value_alertas.csv, ht_value_scan_resumen.csv
 
-Variables de entorno:
-  THESTATSAPI_KEY     (requerida salvo simulación)
-  THESTATSAPI_SIMULATE=true  -> omite la API y usa datos/cuotas simulados
-                                (útil para probar el workflow sin credenciales)
+Variables de entorno (REQUERIDAS):
+  THESTATSAPI_KEY         (requerida, sin simulación)
+  TELEGRAM_BOT_TOKEN      (requerida para notificaciones)
+  TELEGRAM_CHAT_ID        (requerida para notificaciones)
 """
 
 from __future__ import annotations
@@ -39,7 +40,8 @@ log = logging.getLogger("thestatsapi_scan")
 
 BASE_URL = "https://api.thestatsapi.com/api"
 API_KEY = os.environ.get("THESTATSAPI_KEY", "")
-SIMULATE = os.environ.get("THESTATSAPI_SIMULATE", "").lower() == "true"
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
 # ---- umbrales de negocio ----
 REQUEST_TIMEOUT = (5, 30)
@@ -53,6 +55,7 @@ EDGE_MINIMO = 0.07
 PESO_POISSON = 0.5
 PESO_HISTORICO = 0.5
 OVERROUND_CASA = 0.06
+TOP_MATCHES_LIMIT = 10  # Top 10 partidos para Telegram
 
 
 class TheStatsAPIError(Exception):
@@ -76,8 +79,8 @@ class TheStatsClient:
     session: requests.Session = field(default_factory=requests.Session)
 
     def __post_init__(self) -> None:
-        if not SIMULATE and not self.api_key:
-            raise TheStatsAPIError("Define THESTATSAPI_KEY o THESTATSAPI_SIMULATE=true")
+        if not self.api_key:
+            raise TheStatsAPIError("THESTATSAPI_KEY es REQUERIDA (sin simulación)")
         self.session.headers.update({"Authorization": f"Bearer {self.api_key}",
                                      "Accept": "application/json"})
 
@@ -214,14 +217,14 @@ class HTMetricsCache:
 
 
 # --------------------------------------------------------------------------- #
-# Cuotas Over 1.0 HT (API real o simulación determinista)
+# Cuotas Over 1.0 HT y Over 0.5 HT (API real únicamente)
 # --------------------------------------------------------------------------- #
 @dataclass
 class OddsProvider:
     client: TheStatsClient
     bookmaker_pref: tuple = ("Bet365", "Pinnacle", "Betfair")
 
-    def _fetch_from_api(self, match_id: str) -> Optional[float]:
+    def _fetch_from_api(self, match_id: str, line: str = "1.0") -> Optional[float]:
         try:
             r = self.client.get(f"/football/matches/{match_id}/odds")
         except TheStatsAPIError as exc:
@@ -230,30 +233,26 @@ class OddsProvider:
         for bm in (r.get("data") or {}).get("bookmakers") or []:
             if bm.get("bookmaker") not in self.bookmaker_pref:
                 continue
-            line = (bm.get("markets", {}).get("total_goals", {}) or {}).get("1.0")
-            over = (line or {}).get("over", {})
+            market = (bm.get("markets", {}).get("total_goals") or {}).get(line)
+            if not market:
+                continue
+            over = market.get("over", {})
             cuota = over.get("last_seen") or over.get("opening")
             if cuota:
                 return float(cuota)
         return None
 
-    @staticmethod
-    def _simulate(match_id: str, prob_modelo: float) -> float:
-        seed = int(hashlib.sha256(match_id.encode()).hexdigest()[:8], 16)
-        rng = np.random.default_rng(seed)
-        return round((1.0 / max(prob_modelo, 1e-6))
-                     * (1.0 + OVERROUND_CASA) * rng.uniform(0.94, 1.06), 2)
+    def fetch_over_1_ht_odds(self, match_id: str) -> Optional[float]:
+        """Obtiene cuota Over 1.0 HT desde API real"""
+        return self._fetch_from_api(match_id, "1.0")
 
-    def fetch_over_1_ht_odds(self, match_id: str, prob_modelo: float) -> tuple:
-        if not SIMULATE and API_KEY:
-            cuota = self._fetch_from_api(match_id)
-            if cuota:
-                return cuota, "api"
-        return self._simulate(match_id, prob_modelo), "simulada"
+    def fetch_over_05_ht_odds(self, match_id: str) -> Optional[float]:
+        """Obtiene cuota Over 0.5 HT desde API real"""
+        return self._fetch_from_api(match_id, "0.5")
 
 
 # --------------------------------------------------------------------------- #
-# Motor EV+
+# Motor EV+ y detector Over 0.5 HT
 # --------------------------------------------------------------------------- #
 class HTValueBetEngine:
     def __init__(self, odds: OddsProvider):
@@ -287,19 +286,102 @@ class HTValueBetEngine:
                            motivo=f"R2 freq {row['home_Over_1.0_HT_Pct']:.1f}/"
                                   f"{row['away_Over_1.0_HT_Pct']:.1f}% <= {FREQ_MIN_OVER_1_HT}%")
             else:
-                cuota, fuente = self.odds.fetch_over_1_ht_odds(mid, p_sis)
-                edge = p_sis - 1.0 / cuota
-                reg.update(cuota=cuota, fuente_cuota=fuente,
-                           prob_implicita=round(1.0 / cuota, 4),
-                           ventaja=round(edge * 100.0, 2))
-                if edge >= EDGE_MINIMO:
-                    reg["estado"] = "ALERTA_ALTO_VALOR"
-                    alertas.append(reg)
+                cuota = self.odds.fetch_over_1_ht_odds(mid)
+                if not cuota:
+                    reg.update(estado="DESCARTADO", motivo="R3 sin cuota disponible")
                 else:
-                    reg.update(estado="SIN_VALOR",
-                               motivo=f"R3 edge {edge*100:.2f}% < {EDGE_MINIMO*100:.0f}%")
+                    edge = p_sis - 1.0 / cuota
+                    reg.update(cuota=cuota, fuente_cuota="api_real",
+                               prob_implicita=round(1.0 / cuota, 4),
+                               ventaja=round(edge * 100.0, 2))
+                    if edge >= EDGE_MINIMO:
+                        reg["estado"] = "ALERTA_ALTO_VALOR"
+                        alertas.append(reg)
+                    else:
+                        reg.update(estado="SIN_VALOR",
+                                   motivo=f"R3 edge {edge*100:.2f}% < {EDGE_MINIMO*100:.0f}%")
             resumen.append(reg)
         return pd.DataFrame(alertas), pd.DataFrame(resumen)
+
+    def detectar_over_05_ht(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Detecta los TOP 10 partidos con mayor probabilidad de Over 0.5 HT.
+        Ordena por xG proyectado (mayor probabilidad).
+        """
+        registros = []
+        for _, row in df.iterrows():
+            mid = row["match_id"]
+            ph = row["home_xG_HT"] + row["away_xGA_HT"]
+            pa = row["away_xG_HT"] + row["home_xGA_HT"]
+            lam = (ph + pa) / 2.0
+            
+            # P(Over 0.5) = 1 - P(0 goles)
+            p_over_05 = 1.0 - np.exp(-lam)
+            
+            cuota_05 = self.odds.fetch_over_05_ht_odds(mid)
+            
+            registros.append({
+                "match_id": mid,
+                "liga": row.get("competition_name") or row.get("competition_id"),
+                "local": row.get("home_name"),
+                "visitante": row.get("away_name"),
+                "xg_proyectado_ht": round(lam, 2),
+                "prob_over_05": round(p_over_05, 4),
+                "cuota_over_05": cuota_05 or 0.0,
+                "hora_gmt": row.get("utc_date", "N/A")
+            })
+        
+        df_over05 = pd.DataFrame(registros)
+        if not df_over05.empty:
+            df_over05 = df_over05.sort_values("prob_over_05", ascending=False)
+        return df_over05.head(TOP_MATCHES_LIMIT)
+
+
+# --------------------------------------------------------------------------- #
+# Notificaciones Telegram
+# --------------------------------------------------------------------------- #
+class TelegramNotifier:
+    def __init__(self, token: str, chat_id: str):
+        self.token = token
+        self.chat_id = chat_id
+        self.api_url = f"https://api.telegram.org/bot{token}"
+
+    def send_message(self, text: str) -> bool:
+        """Envía mensaje de texto a Telegram"""
+        if not self.token or not self.chat_id:
+            log.warning("Telegram no configurado (BOT_TOKEN o CHAT_ID faltando)")
+            return False
+        try:
+            resp = requests.post(f"{self.api_url}/sendMessage",
+                                 json={"chat_id": self.chat_id, "text": text},
+                                 timeout=10)
+            if resp.status_code == 200:
+                log.info("Mensaje Telegram enviado exitosamente")
+                return True
+            else:
+                log.error("Error Telegram: %d - %s", resp.status_code, resp.text)
+                return False
+        except Exception as exc:
+            log.error("Error enviando Telegram: %s", exc)
+            return False
+
+    def send_top_matches(self, df_top10: pd.DataFrame) -> bool:
+        """Envía los top 10 partidos Over 0.5 HT formateados"""
+        if df_top10.empty:
+            text = "🏟️ *Escan Over 0.5 HT (Top 10)*\n\n❌ Sin partidos con probabilidad significativa."
+        else:
+            lines = ["🏟️ *Top 10 Partidos Over 0.5 HT (1ª Parte)*\n"]
+            for idx, (_, row) in enumerate(df_top10.iterrows(), 1):
+                lines.append(
+                    f"{idx}. *{row['local']}* vs *{row['visitante']}*\n"
+                    f"   📊 {row['liga']}\n"
+                    f"   🎲 P(Over 0.5): {row['prob_over_05']*100:.1f}%\n"
+                    f"   💰 Cuota: {row['cuota_over_05']:.2f}\n"
+                    f"   ⏰ {row['hora_gmt']}\n"
+                )
+            text = "".join(lines)
+        
+        return self.send_message(text)
 
 
 # --------------------------------------------------------------------------- #
@@ -322,7 +404,7 @@ def build_ht_dataframe(client, matches, exclude_self=True) -> pd.DataFrame:
             log.error("%s: %s", mid, exc2)
             continue
         row = {"match_id": mid, "date": m.get("utc_date"), "competition_id": comp,
-               "season_id": season, "status": m.get("status"),
+               "season_id": season, "status": m.get("status"), "utc_date": m.get("utc_date"),
                "home_id": home.get("id"), "home_name": home.get("name"),
                "away_id": away.get("id"), "away_name": away.get("name")}
         row.update({f"home_{k}": v for k, v in hm.items()})
@@ -337,47 +419,53 @@ def build_ht_dataframe(client, matches, exclude_self=True) -> pd.DataFrame:
 
 
 def run() -> int:
+    if not API_KEY:
+        raise TheStatsAPIError("THESTATSAPI_KEY es REQUERIDA")
+    
     client = TheStatsClient(api_key=API_KEY)
     hoy = datetime.now(timezone.utc).date().isoformat()
-    log.info("=== Scan %s | simulate=%s ===", hoy, SIMULATE)
+    log.info("=== Scan %s (API Real) ===", hoy)
 
-    if SIMULATE:
-        matches = [{"id": f"mt_sim{i}", "competition_id": "comp_demo",
-                    "season_id": "sn_demo", "status": "scheduled",
-                    "home_team": {"id": f"tm_h{i}", "name": f"Local {i}"},
-                    "away_team": {"id": f"tm_a{i}", "name": f"Visitante {i}"}}
-                   for i in range(1, 5)]
-        rng = np.random.default_rng(42)
-        df_ht = pd.DataFrame([{
-            "match_id": m["id"], "competition_id": m["competition_id"],
-            "competition_name": "Demo League",
-            "home_name": m["home_team"]["name"], "away_name": m["away_team"]["name"],
-            "home_xG_HT": round(float(rng.uniform(0.5, 1.5)), 3),
-            "home_xGA_HT": round(float(rng.uniform(0.3, 1.0)), 3),
-            "away_xG_HT": round(float(rng.uniform(0.5, 1.5)), 3),
-            "away_xGA_HT": round(float(rng.uniform(0.3, 1.0)), 3),
-            "home_Over_1.0_HT_Pct": round(float(rng.uniform(55, 85)), 1),
-            "away_Over_1.0_HT_Pct": round(float(rng.uniform(55, 85)), 1),
-        } for m in matches])
-    else:
-        matches = client.get_all_pages("/football/matches",
-                                       {"date_from": hoy, "date_to": hoy})
-        log.info("%d partidos hoy", len(matches))
-        df_ht = build_ht_dataframe(client, matches)
-
+    matches = client.get_all_pages("/football/matches",
+                                   {"date_from": hoy, "date_to": hoy})
+    log.info("Scan completo: %d partidos", len(matches))
+    
+    if not matches:
+        log.info("[%s] Sin partidos hoy", hoy)
+        return 0
+    
+    df_ht = build_ht_dataframe(client, matches)
+    if df_ht.empty:
+        log.info("[%s] Sin métricas disponibles", hoy)
+        return 0
+    
     df_ht.to_csv("ht_metrics_today.csv", index=False)
-    alertas, resumen = HTValueBetEngine(OddsProvider(client)).evaluar(df_ht)
+    
+    # Engine EV+
+    engine = HTValueBetEngine(OddsProvider(client))
+    alertas, resumen = engine.evaluar(df_ht)
     resumen.to_csv("ht_value_scan_resumen.csv", index=False)
     alertas.to_csv("ht_value_alertas.csv", index=False)
 
     if alertas.empty:
-        print(f"[{hoy}] Ningún partido supera los filtros de valor.")
+        log.info("[%s] Ningún partido supera los filtros de valor", hoy)
     else:
+        log.info("[%s] %d alertas EV+", hoy, len(alertas))
         for _, r in alertas.iterrows():
             print(f"[{r['match_id']}] {r['liga']} | {r['local']} vs {r['visitante']} | "
                   f"xG Proyectado HT: {r['xg_proyectado_ht']:.2f} | "
                   f"Cuota: {r['cuota']:.2f} | Ventaja: {r['ventaja']:.1f}%")
-    log.info("Scan completo: %d partidos | %d alertas EV+", len(df_ht), len(alertas))
+
+    # Detector Over 0.5 HT y envío Telegram
+    df_top10 = engine.detectar_over_05_ht(df_ht)
+    if not df_top10.empty:
+        df_top10.to_csv("ht_over05_top10.csv", index=False)
+        log.info("Top 10 partidos Over 0.5 HT encontrados: %d", len(df_top10))
+        
+        # Enviar a Telegram
+        notifier = TelegramNotifier(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID)
+        notifier.send_top_matches(df_top10)
+    
     return 0
 
 

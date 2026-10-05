@@ -1,0 +1,5 @@
+match_id,competition_id,competition_name,home_name,away_name,home_xG_HT,home_xGA_HT,away_xG_HT,away_xGA_HT,home_Over_1.0_HT_Pct,away_Over_1.0_HT_Pct
+mt_sim1,comp_demo,Demo League,Local 1,Visitante 1,1.274,0.607,1.359,0.788,57.8,84.3
+mt_sim2,comp_demo,Demo League,Local 2,Visitante 2,1.261,0.85,0.628,0.615,66.1,82.8
+mt_sim3,comp_demo,Demo League,Local 3,Visitante 3,1.144,0.876,0.943,0.459,71.6,56.9
+mt_sim4,comp_demo,Demo League,Local 4,Visitante 4,1.328,0.742,1.258,0.548,84.1,81.8

@@ -2,8 +2,31 @@ name: thestatsapi-ht-scan
 
 on:
   schedule:
-    - cron: "0 */2 * * *"    # cada 2 horas (UTC)
+    # 07:30 UTC -> partidos que comienzan a las 08:00
+    - cron: "30 7 * * *"
+    # 09:30 UTC -> partidos que comienzan a las 10:00
+    - cron: "30 9 * * *"
+    # 11:30 UTC -> partidos que comienzan a las 12:00
+    - cron: "30 11 * * *"
+    # 13:30 UTC -> partidos que comienzan a las 14:00
+    - cron: "30 13 * * *"
+    # 15:30 UTC -> partidos que comienzan a las 16:00
+    - cron: "30 15 * * *"
+    # 17:30 UTC -> partidos que comienzan a las 18:00
+    - cron: "30 17 * * *"
+    # 19:30 UTC -> partidos que comienzan a las 20:00
+    - cron: "30 19 * * *"
+    # 21:30 UTC -> partidos que comienzan a las 22:00
+    - cron: "30 21 * * *"
+
   workflow_dispatch:
+    inputs:
+      target_start_hour:
+        description: "Hora UTC de inicio del partido a analizar (8, 10, 12, 14, 16, 18, 20, 22)"
+        required: false
+        default: "8"
+        type: choice
+        options: ["8", "10", "12", "14", "16", "18", "20", "22"]
 
 permissions:
   contents: write
@@ -11,7 +34,7 @@ permissions:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
@@ -23,23 +46,48 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r requirements.txt
 
-      - name: Ejecutar scanner HT + EV+ + Top 10 Telegram
+      - name: Resolver hora objetivo
+        id: target
+        shell: bash
+        run: |
+          TARGET="${{ github.event.inputs.target_start_hour || '' }}"
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            HOUR=$(date -u +%H)
+            case "$HOUR" in
+              07) TARGET="8" ;;
+              09) TARGET="10" ;;
+              11) TARGET="12" ;;
+              13) TARGET="14" ;;
+              15) TARGET="16" ;;
+              17) TARGET="18" ;;
+              19) TARGET="20" ;;
+              21) TARGET="22" ;;
+              *) TARGET="8" ;;
+            esac
+          fi
+          if [ -z "$TARGET" ]; then
+            TARGET="8"
+          fi
+          echo "target_start_hour=$TARGET" >> "$GITHUB_OUTPUT"
+          echo "HORA OBJETIVO: $TARGET UTC"
+
+      - name: Ejecutar scanner HT + EV+
         env:
           THESTATSAPI_KEY: ${{ secrets.THESTATSAPI_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TARGET_START_HOUR: ${{ steps.target.outputs.target_start_hour }}
         run: python thestatsapi_scan.py
 
       - name: Publicar resultados (artifacts)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ht-scan-results-${{ github.run_number }}
+          name: ht-scan-results-${{ steps.target.outputs.target_start_hour }}-${{ github.run_number }}
           path: |
             ht_metrics_today.csv
             ht_value_scan_resumen.csv
             ht_value_alertas.csv
-            ht_over05_top10.csv
           retention-days: 30
 
       - name: Guardar CSVs en el repositorio
@@ -48,7 +96,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           mkdir -p results
-          cp ht_metrics_today.csv ht_value_scan_resumen.csv ht_value_alertas.csv ht_over05_top10.csv results/ 2>/dev/null || true
+          cp ht_metrics_today.csv ht_value_scan_resumen.csv ht_value_alertas.csv results/ 2>/dev/null || true
           git add results/*.csv
-          git diff --cached --quiet || git commit -m "scan HT $(date -u +%F)"
+          git diff --cached --quiet || git commit -m "scan HT $(date -u +%F) @${{ steps.target.outputs.target_start_hour }}h"
           git push

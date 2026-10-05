@@ -1,2 +1,7 @@
 match_id,date,competition_id,season_id,status,utc_date,home_id,home_name,away_id,away_name,competition_name,home_matches_sample,home_xG_HT,home_xGA_HT,home_Shots_On_Target_HT_For,home_Shots_On_Target_HT_Against,home_Over_1.0_HT_Pct,away_matches_sample,away_xG_HT,away_xGA_HT,away_Shots_On_Target_HT_For,away_Shots_On_Target_HT_Against,away_Over_1.0_HT_Pct
-mt_465110196,2026-10-05T20:00:00.000Z,comp_5537,sn_1305673,scheduled,2026-10-05T20:00:00.000Z,tm_10506,Nueva Chicago,tm_9821768,Deportivo Maipú,,0.0,,,,,,0.0,,,,,
+mt_746350090,2026-10-05T16:30:00.000Z,comp_6267,sn_9670721,finished,2026-10-05T16:30:00.000Z,tm_53474,Sweden U21,tm_88397,North Macedonia U21,,1.0,,,1.0,2.0,,1.0,,,0.0,3.0,
+mt_837906650,2026-10-05T16:15:00.000Z,comp_6267,sn_9670721,finished,2026-10-05T16:15:00.000Z,tm_86694,Italy U21,tm_70034,Poland U21,,4.0,,,2.75,1.0,,0.0,,,,,
+mt_371803640,2026-10-05T16:00:00.000Z,comp_29967,sn_4570744,postponed,2026-10-05T16:00:00.000Z,tm_306565,Rwanda,tm_53251,Kenya,,0.0,,,,,,0.0,,,,,
+mt_514267467,2026-10-05T16:00:00.000Z,comp_08840,sn_8453035,finished,2026-10-05T16:00:00.000Z,tm_99440,Serbia U21,tm_77402,Russia U21,,0.0,,,,,,0.0,,,,,
+mt_159933891,2026-10-05T16:00:00.000Z,comp_574977,sn_4571664,finished,2026-10-05T16:00:00.000Z,tm_94680,Cyprus,tm_65386,Latvia,,1.0,0.53,0.36,3.0,3.0,,1.0,0.11,0.59,0.0,2.0,
+mt_517544293,2026-10-05T16:00:00.000Z,comp_573792,sn_1300764,finished,2026-10-05T16:00:00.000Z,tm_2229,Fana,tm_8802488,Asane Fotball 2,,0.0,,,,,,0.0,,,,,

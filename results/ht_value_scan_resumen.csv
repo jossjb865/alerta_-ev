@@ -1,4 +1,6 @@
 match_id,liga,local,visitante,xg_proyectado_ht,prob_sistema,estado,motivo
-mt_206050582,comp_4540,Vélez Sarsfield,Platense,0.96,,DESCARTADO,R1 xG HT 1.17/0.74 <= 1.45
-mt_467606010,comp_4540,Estudiantes de La Plata,Gimnasia y Esgrima Mendoza,0.88,,DESCARTADO,R1 xG HT 1.08/0.67 <= 1.45
-mt_739319225,comp_193547,Martinique,El Salvador,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_739343400,comp_4540,Banfield,Rosario Central,1.11,,DESCARTADO,R1 xG HT 1.04/1.18 <= 1.45
+mt_735139364,comp_193547,Bermuda,Barbados,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_512162786,comp_193547,Grenada,Bonaire,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_895925445,comp_193547,Guatemala,Suriname,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_733652725,comp_720692,Independiente Medellín,Independiente Santa Fe,0.98,,DESCARTADO,R1 xG HT 1.12/0.84 <= 1.45

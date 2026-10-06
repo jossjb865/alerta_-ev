@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-TheStatsAPI — Scanner diario de métricas HT + Alertas EV+ (Over 1.0 HT)
+TheStatsAPI — Scanner diario de métricas HT + Alertas EV+ (Over 0.5 HT + Over 1.5 FT)
 ========================================================================
 Pipeline completo, datos en vivo desde API TheStatsAPI únicamente.
-
+ 
   1. GET /football/matches?date_from=hoy&date_to=hoy      -> partidos del día
   2. Por cada partido: historial HT de temporada actual (condición local/visit.)
      vía /football/matches?team_id=...&status=finished + /football/matches/{id}/stats
      (overview.expected_goals.first_half, shots.shots_on_target.first_half)
-  3. Cuota Over 1.0 HT: GET /football/matches/{id}/odds -> total_goals["1.0"].over
-  4. Filtros EV+ (xG proyectado > 1.45 ambas direcciones, freq > 65%, edge >= 7%)
-  5. Envío a Telegram SOLO de partidos con valor EV+
-  6. Salida: ht_metrics_today.csv, ht_value_alertas.csv, ht_value_scan_resumen.csv
-
+  3. Cuota Over 0.5 HT: GET /football/matches/{id}/odds -> total_goals["0.5"].over
+  4. Cuota Over 1.5 FT: GET /football/matches/{id}/odds -> total_goals["1.5"].over
+  5. Filtros EV+ (xG proyectado > 1.45 ambas direcciones, freq > 65%, edge >= 7%)
+  6. Envío a Telegram SOLO de partidos con valor EV+
+  7. Salida: ht_metrics_today.csv, ht_value_alertas.csv, ht_value_scan_resumen.csv
+ 
 Variables de entorno (REQUERIDAS):
   THESTATSAPI_KEY         (requerida, sin simulación)
   TELEGRAM_BOT_TOKEN      (requerida para notificaciones)
@@ -51,7 +52,7 @@ RETRY_BACKOFF = 1.5
 RATE_LIMIT_SLEEP = 0.30
 PER_PAGE = 100
 PROYECCION_MIN_XG_HT = 1.45
-FREQ_MIN_OVER_1_HT = 65.0
+FREQ_MIN_OVER_0_5_HT = 65.0  # Frecuencia mínima para Over 0.5 HT
 EDGE_MINIMO = 0.07
 PESO_POISSON = 0.5
 PESO_HISTORICO = 0.5
@@ -219,7 +220,7 @@ class HTMetricsCache:
     def ht_metrics(self, team_id, competition_id, season_id, side, exclude_match_id=None) -> dict:
         matches = self.team_finished_matches(team_id, competition_id, season_id, side)
         xg_sum = xga_sum = sot_f_sum = sot_a_sum = 0.0
-        n_xg = n_sot = over_1 = n_over = 0
+        n_xg = n_sot = over_05 = n_over = 0
         for m in matches:
             if m["id"] == exclude_match_id:
                 continue
@@ -249,8 +250,8 @@ class HTMetricsCache:
             ga = m.get("score", {}).get(f"half_time_{opp}")
             if gf is not None and ga is not None:
                 n_over += 1
-                if gf + ga > 1.0:
-                    over_1 += 1
+                if gf + ga > 0.5:  # CAMBIADO: Over 0.5 HT en lugar de Over 1.0 HT
+                    over_05 += 1
 
         return {
             "matches_sample": max(n_xg, n_sot, n_over),
@@ -258,12 +259,12 @@ class HTMetricsCache:
             "xGA_HT": xga_sum / n_xg if n_xg else None,
             "Shots_On_Target_HT_For": sot_f_sum / n_sot if n_sot else None,
             "Shots_On_Target_HT_Against": sot_a_sum / n_sot if n_sot else None,
-            "Over_1.0_HT_Pct": (over_1 / n_over * 100.0) if n_over else None,
+            "Over_0.5_HT_Pct": (over_05 / n_over * 100.0) if n_over else None,  # CAMBIADO a Over 0.5
         }
 
 
 # --------------------------------------------------------------------------- #
-# Cuotas Over 1.0 HT y Over 0.5 HT (API real únicamente)
+# Cuotas Over 0.5 HT y Over 1.5 FT (API real únicamente)
 # --------------------------------------------------------------------------- #
 @dataclass
 class OddsProvider:
@@ -289,11 +290,11 @@ class OddsProvider:
                 return float(cuota)
         return None
 
-    def fetch_over_1_ht_odds(self, match_id: str) -> Optional[float]:
-        return self._fetch_from_api(match_id, "1.0")
-
     def fetch_over_05_ht_odds(self, match_id: str) -> Optional[float]:
         return self._fetch_from_api(match_id, "0.5")
+
+    def fetch_over_15_ft_odds(self, match_id: str) -> Optional[float]:
+        return self._fetch_from_api(match_id, "1.5")
 
 
 # --------------------------------------------------------------------------- #
@@ -319,7 +320,7 @@ class HTValueBetEngine:
             p_sis = (
                 0.5 * self._p_poisson(lam)
                 + 0.5 * (
-                    (row["home_Over_1.0_HT_Pct"] + row["away_Over_1.0_HT_Pct"]) / 200.0
+                    (row["home_Over_0.5_HT_Pct"] + row["away_Over_0.5_HT_Pct"]) / 200.0  # CAMBIADO a Over 0.5
                 )
             )
 
@@ -338,24 +339,31 @@ class HTValueBetEngine:
                     motivo=f"R1 xG HT {ph:.2f}/{pa:.2f} <= {PROYECCION_MIN_XG_HT}"
                 )
             elif not (
-                row["home_Over_1.0_HT_Pct"] > FREQ_MIN_OVER_1_HT
-                and row["away_Over_1.0_HT_Pct"] > FREQ_MIN_OVER_1_HT
+                row["home_Over_0.5_HT_Pct"] > FREQ_MIN_OVER_0_5_HT  # CAMBIADO a Over 0.5
+                and row["away_Over_0.5_HT_Pct"] > FREQ_MIN_OVER_0_5_HT
             ):
                 reg.update(
                     estado="DESCARTADO",
-                    motivo=f"R2 freq {row['home_Over_1.0_HT_Pct']:.1f}/"
-                           f"{row['away_Over_1.0_HT_Pct']:.1f}% <= {FREQ_MIN_OVER_1_HT}%"
+                    motivo=f"R2 freq {row['home_Over_0.5_HT_Pct']:.1f}/"
+                           f"{row['away_Over_0.5_HT_Pct']:.1f}% <= {FREQ_MIN_OVER_0_5_HT}%"
                 )
             else:
-                cuota = self.odds.fetch_over_1_ht_odds(mid)
-                if not cuota:
-                    reg.update(estado="DESCARTADO", motivo="R3 sin cuota disponible")
+                # CAMBIADO: Usa Over 0.5 HT + Over 1.5 FT
+                cuota_ht = self.odds.fetch_over_05_ht_odds(mid)
+                cuota_ft = self.odds.fetch_over_15_ft_odds(mid)
+                
+                if not cuota_ht or not cuota_ft:
+                    reg.update(estado="DESCARTADO", motivo="R3 sin cuotas disponibles (HT o FT)")
                 else:
-                    edge = p_sis - (1.0 / cuota)
+                    # Promedio de ambas cuotas para calcular edge
+                    cuota_promedio = (cuota_ht + cuota_ft) / 2.0
+                    edge = p_sis - (1.0 / cuota_promedio)
                     reg.update(
-                        cuota=cuota,
+                        cuota_ht=round(cuota_ht, 2),
+                        cuota_ft=round(cuota_ft, 2),
+                        cuota_promedio=round(cuota_promedio, 2),
                         fuente_cuota="api_real",
-                        prob_implicita=round(1.0 / cuota, 4),
+                        prob_implicita=round(1.0 / cuota_promedio, 4),
                         ventaja=round(edge * 100.0, 2),
                     )
                     if edge >= EDGE_MINIMO:
@@ -413,7 +421,7 @@ class TelegramNotifier:
         df = df.sort_values(["ventaja", "xg_proyectado_ht"], ascending=[False, False]).head(10)
 
         lines = [
-            "🏟️ *ALERTAS EV+ - OVER 1.0 HT*",
+            "🏟️ *ALERTAS EV+ - OVER 0.5 HT + OVER 1.5 FT*",  # CAMBIADO
             "══════════════════════════════",
             f"⏰ {datetime.now(timezone.utc).strftime('%d/%m/%Y %H:%M')} UTC",
             ""
@@ -424,13 +432,14 @@ class TelegramNotifier:
             local = str(row.local)
             visitante = str(row.visitante)
             xg = float(row.xg_proyectado_ht)
-            cuota = float(row.cuota)
+            cuota_ht = float(row.cuota_ht)
+            cuota_ft = float(row.cuota_ft)
             ventaja = float(row.ventaja)
 
             lines.append(f"{idx}. ⚽ *{local}* vs *{visitante}*")
             lines.append(f"   📊 {liga}")
             lines.append(
-                f"   🎯 xG HT: *{xg:.2f}* | Cuota: *{cuota:.2f}* | Edge: *{ventaja:.2f}%*"
+                f"   🎯 xG HT: *{xg:.2f}* | Over 0.5 HT: *{cuota_ht:.2f}* | Over 1.5 FT: *{cuota_ft:.2f}* | Edge: *{ventaja:.2f}%*"
             )
             lines.append("")
 
@@ -525,7 +534,7 @@ def run() -> int:
             print(
                 f"[{r['match_id']}] {r['liga']} | {r['local']} vs {r['visitante']} | "
                 f"xG Proyectado HT: {r['xg_proyectado_ht']:.2f} | "
-                f"Cuota: {r['cuota']:.2f} | Ventaja: {r['ventaja']:.1f}%"
+                f"Over 0.5 HT: {r['cuota_ht']:.2f} | Over 1.5 FT: {r['cuota_ft']:.2f} | Ventaja: {r['ventaja']:.1f}%"
             )
 
     # SOLO partidos con valor EV+

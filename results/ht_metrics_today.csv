@@ -1,6 +1,3 @@
 match_id,date,competition_id,season_id,status,utc_date,home_id,home_name,away_id,away_name,competition_name,home_matches_sample,home_xG_HT,home_xGA_HT,home_Shots_On_Target_HT_For,home_Shots_On_Target_HT_Against,home_Over_0.5_HT_Pct,away_matches_sample,away_xG_HT,away_xGA_HT,away_Shots_On_Target_HT_For,away_Shots_On_Target_HT_Against,away_Over_0.5_HT_Pct
-mt_739343400,2026-10-06T00:15:00.000Z,comp_4540,sn_5721417,finished,2026-10-06T00:15:00.000Z,tm_79300,Banfield,tm_38728,Rosario Central,,12.0,0.278,0.935,2.0,2.083,,14.0,0.242,0.763,1.429,2.214,
-mt_735139364,2026-10-06T00:00:00.000Z,comp_193547,sn_7202912,finished,2026-10-06T00:00:00.000Z,tm_41780,Bermuda,tm_893834,Barbados,,1.0,,,4.0,1.0,,1.0,,,0.0,0.0,
-mt_512162786,2026-10-06T00:00:00.000Z,comp_193547,sn_7202912,finished,2026-10-06T00:00:00.000Z,tm_021015,Grenada,tm_6483212,Bonaire,,1.0,,,1.0,3.0,,1.0,,,1.0,2.0,
-mt_895925445,2026-10-06T00:00:00.000Z,comp_193547,sn_7202912,finished,2026-10-06T00:00:00.000Z,tm_59633,Guatemala,tm_987984,Suriname,,1.0,,,4.0,1.0,,1.0,,,3.0,3.0,
-mt_733652725,2026-10-06T00:00:00.000Z,comp_720692,sn_5722143,finished,2026-10-06T00:00:00.000Z,tm_44677,Independiente Medellín,tm_66439,Independiente Santa Fe,,16.0,0.553,0.419,2.438,2.0,,16.0,0.417,0.567,2.125,1.875,
+mt_987691099,2026-10-07T00:35:00.000Z,comp_1085,sn_1307939,finished,2026-10-07T00:35:00.000Z,tm_74046,Ponte Preta,tm_19704,Juventude,,15.0,0.547,0.591,1.8,1.733,,15.0,0.365,0.611,1.267,2.533,
+mt_643925388,2026-10-07T00:00:00.000Z,comp_29967,sn_4570744,finished,2026-10-07T00:00:00.000Z,tm_09410,USA,tm_94140,Canada,,7.0,,,2.286,2.571,,0.0,,,,,

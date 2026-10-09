@@ -1,2 +1,2 @@
 match_id,date,competition_id,season_id,status,utc_date,home_id,home_name,away_id,away_name,competition_name,home_matches_sample,home_xG_HT,home_xGA_HT,home_Shots_On_Target_HT_For,home_Shots_On_Target_HT_Against,home_Over_0.5_HT_Pct,away_matches_sample,away_xG_HT,away_xGA_HT,away_Shots_On_Target_HT_For,away_Shots_On_Target_HT_Against,away_Over_0.5_HT_Pct
-mt_150647305,2026-10-09T08:30:00.000Z,comp_45672,sn_0891920,scheduled,2026-10-09T08:30:00.000Z,tm_6225442,Persik Kediri,tm_8454677,Madura United FC,,0.0,,,,,,0.0,,,,,
+mt_150647305,2026-10-09T08:30:00.000Z,comp_45672,sn_0891920,finished,2026-10-09T08:30:00.000Z,tm_6225442,Persik Kediri,tm_8454677,Madura United FC,,0.0,,,,,,0.0,,,,,

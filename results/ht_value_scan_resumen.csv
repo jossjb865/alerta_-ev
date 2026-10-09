@@ -1,3 +1,2 @@
 match_id,liga,local,visitante,xg_proyectado_ht,prob_sistema,estado,motivo
-mt_894676854,comp_970794,Corpus Christi FC,Fort Wayne FC,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_465197868,comp_4795,Cruzeiro,São Paulo,1.13,,DESCARTADO,R1 xG HT 1.46/0.79 <= 1.45
+mt_150647305,comp_45672,Persik Kediri,Madura United FC,,,DESCARTADO,R1 xG HT nan/nan <= 1.45

@@ -1,2 +1,3 @@
 match_id,liga,local,visitante,xg_proyectado_ht,prob_sistema,estado,motivo
-mt_150647305,comp_45672,Persik Kediri,Madura United FC,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_517362411,comp_4795,Palmeiras,Bahia,1.07,,DESCARTADO,R1 xG HT 1.21/0.93 <= 1.45
+mt_153740654,comp_4795,Fluminense,Coritiba,1.0,,DESCARTADO,R1 xG HT 1.29/0.71 <= 1.45

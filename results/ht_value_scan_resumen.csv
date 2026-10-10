@@ -1,12 +1,6 @@
 match_id,liga,local,visitante,xg_proyectado_ht,prob_sistema,estado,motivo
-mt_467891519,comp_45672,PSIM Yogyakarta,Persija Jakarta,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_206738977,comp_45672,Arema FC,Bhayangkara Presisi Indonesia FC,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_150647360,comp_45672,Persita Tangerang,Garudayaksa FC,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_206652016,comp_742231,Gençlerbirliği U19,Amed Sportif Faaliyetler U19,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_895908692,comp_9491,CS Dinamo București,CSM Olimpia Satu Mare,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_467006992,comp_9491,CSC 1599 Șelimbăr,AFC Unirea 04 Slobozia,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_981778001,comp_9491,AFC Metalul Buzău,ASA Târgu Mureş,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_206550330,comp_9491,CS Gloria Bistrița,SCM Râmnicu Vâlcea,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_150995449,comp_9491,FC Metaloglobus București,SC Popești-Leordeni,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_643222660,comp_9491,ACSM Cetatea 1932 Suceava,CSC Dumbrăviţa,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_467000441,comp_9491,Chindia Târgoviște,Concordia Chiajna,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_988326980,comp_720692,Deportivo Pereira,Deportivo Cali,0.86,,DESCARTADO,R1 xG HT 0.78/0.94 <= 1.45
+mt_988241098,comp_6981,Comerciantes Unidos,ADC Juan Pablo II,0.0,,DESCARTADO,R1 xG HT 0.00/0.00 <= 1.45
+mt_465499724,comp_573599,Huachipato,O'Higgins,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_206050523,comp_4540,Central Córdoba,Estudiantes de La Plata,0.93,,DESCARTADO,R1 xG HT 1.11/0.74 <= 1.45
+mt_987613942,comp_194097,FC Supra Du Quebec,Vancouver FC,0.0,,DESCARTADO,R1 xG HT 0.00/0.00 <= 1.45

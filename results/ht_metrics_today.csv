@@ -1,6 +1,6 @@
 match_id,date,competition_id,season_id,status,utc_date,home_id,home_name,away_id,away_name,competition_name,home_matches_sample,home_xG_HT,home_xGA_HT,home_Shots_On_Target_HT_For,home_Shots_On_Target_HT_Against,home_Over_0.5_HT_Pct,away_matches_sample,away_xG_HT,away_xGA_HT,away_Shots_On_Target_HT_For,away_Shots_On_Target_HT_Against,away_Over_0.5_HT_Pct
-mt_024379830,2026-10-11T08:30:00.000Z,comp_45672,sn_0891920,scheduled,2026-10-11T08:30:00.000Z,tm_5127947,PSS Sleman,tm_0119227,PSM Makassar,,0.0,,,,,,0.0,,,,,
-mt_981204624,2026-10-11T08:30:00.000Z,comp_45672,sn_0891920,scheduled,2026-10-11T08:30:00.000Z,tm_8838764,Malut United FC,tm_4654899,Borneo FC Samarinda,,0.0,,,,,,0.0,,,,,
-mt_733679171,2026-10-11T08:30:00.000Z,comp_4519,sn_9623807,scheduled,2026-10-11T08:30:00.000Z,tm_19898,Admira Wacker,tm_25185,ASK Voitsberg,,0.0,,,,,,0.0,,,,,
-mt_024410255,2026-10-11T08:00:00.000Z,comp_742231,sn_0891800,scheduled,2026-10-11T08:00:00.000Z,tm_5153856,Konyaspor U19,tm_6395166,Istanbul Başakşehir U19,,0.0,,,,,,0.0,,,,,
-mt_739443112,2026-10-11T08:00:00.000Z,comp_9491,sn_1374148,scheduled,2026-10-11T08:00:00.000Z,tm_2903602,CS Afumați,tm_7063073,CSL Ștefănești,,0.0,,,,,,0.0,,,,,
+mt_024379830,2026-10-11T08:30:00.000Z,comp_45672,sn_0891920,finished,2026-10-11T08:30:00.000Z,tm_5127947,PSS Sleman,tm_0119227,PSM Makassar,,0.0,,,,,,0.0,,,,,
+mt_981204624,2026-10-11T08:30:00.000Z,comp_45672,sn_0891920,finished,2026-10-11T08:30:00.000Z,tm_8838764,Malut United FC,tm_4654899,Borneo FC Samarinda,,0.0,,,,,,0.0,,,,,
+mt_733679171,2026-10-11T08:30:00.000Z,comp_4519,sn_9623807,finished,2026-10-11T08:30:00.000Z,tm_19898,Admira Wacker,tm_25185,ASK Voitsberg,,0.0,,,,,,0.0,,,,,
+mt_024410255,2026-10-11T08:00:00.000Z,comp_742231,sn_0891800,finished,2026-10-11T08:00:00.000Z,tm_5153856,Konyaspor U19,tm_6395166,Istanbul Başakşehir U19,,0.0,,,,,,0.0,,,,,
+mt_739443112,2026-10-11T08:00:00.000Z,comp_9491,sn_1374148,finished,2026-10-11T08:00:00.000Z,tm_2903602,CS Afumați,tm_7063073,CSL Ștefănești,,0.0,,,,,,0.0,,,,,

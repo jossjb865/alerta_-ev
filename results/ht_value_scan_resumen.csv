@@ -1,14 +1,10 @@
 match_id,liga,local,visitante,xg_proyectado_ht,prob_sistema,estado,motivo
-mt_022394703,comp_6981,Sport Boys,Alianza Atlético de Sullana,0.0,,DESCARTADO,R1 xG HT 0.00/0.00 <= 1.45
-mt_734279226,comp_1085,Náutico,Vila Nova FC,1.15,,DESCARTADO,R1 xG HT 1.57/0.73 <= 1.45
-mt_641688981,comp_573599,Deportes Concepción,Unión La Calera,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_370258435,comp_4795,Grêmio,Internacional,1.11,,DESCARTADO,R1 xG HT 1.16/1.07 <= 1.45
-mt_517362422,comp_4795,Palmeiras,Corinthians,0.9,,DESCARTADO,R1 xG HT 1.29/0.52 <= 1.45
-mt_153740603,comp_4795,Flamengo,Fluminense,1.02,,DESCARTADO,R1 xG HT 1.32/0.73 <= 1.45
-mt_982177608,comp_30610,Wydad Casablanca,CODM Meknès,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_467891877,comp_2518,Anzoátegui FC,Carabobo,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_378152171,comp_2518,Trujillanos FC,Academia Puerto Cabello,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_024212102,comp_4540,Rosario Central,Independiente Rivadavia,0.8,,DESCARTADO,R1 xG HT 0.79/0.80 <= 1.45
-mt_643424203,comp_4540,Platense,Argentinos Juniors,0.58,,DESCARTADO,R1 xG HT 0.68/0.47 <= 1.45
-mt_732004031,comp_5537,Deportivo Maipú,San Martín de San Juan,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_209885859,comp_5537,Central Norte de Salta,Club Ferro Carril Oeste,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_378767632,comp_4540,River Plate,Estudiantes de Río Cuarto,0.96,,DESCARTADO,R1 xG HT 1.32/0.59 <= 1.45
+mt_028959045,comp_970794,Corpus Christi FC,FC Naples,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_209620780,comp_9799,Minnesota United,Houston Dynamo,1.13,,DESCARTADO,R1 xG HT 1.30/0.96 <= 1.45
+mt_153015679,comp_9799,Sporting Kansas City,Portland Timbers,1.55,,DESCARTADO,R1 xG HT 1.72/1.37 <= 1.45
+mt_894589062,comp_9799,Austin FC,Nashville SC,1.06,,DESCARTADO,R1 xG HT 1.04/1.07 <= 1.45
+mt_739657227,comp_153661,Vaqueros Reynosa FC,Saltillo Soccer FC,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_895708447,comp_153661,La Tribu de Ciudad Juarez,Santiago FC,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_377128533,comp_6981,Universitario,Melgar,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_986401218,comp_4795,São Paulo,Vitória,1.07,,DESCARTADO,R1 xG HT 1.62/0.53 <= 1.45

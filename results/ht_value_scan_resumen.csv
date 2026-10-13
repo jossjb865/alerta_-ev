@@ -1,10 +1,6 @@
 match_id,liga,local,visitante,xg_proyectado_ht,prob_sistema,estado,motivo
-mt_378767632,comp_4540,River Plate,Estudiantes de Río Cuarto,0.96,,DESCARTADO,R1 xG HT 1.32/0.59 <= 1.45
-mt_028959045,comp_970794,Corpus Christi FC,FC Naples,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_209620780,comp_9799,Minnesota United,Houston Dynamo,1.13,,DESCARTADO,R1 xG HT 1.30/0.96 <= 1.45
-mt_153015679,comp_9799,Sporting Kansas City,Portland Timbers,1.55,,DESCARTADO,R1 xG HT 1.72/1.37 <= 1.45
-mt_894589062,comp_9799,Austin FC,Nashville SC,1.06,,DESCARTADO,R1 xG HT 1.04/1.07 <= 1.45
-mt_739657227,comp_153661,Vaqueros Reynosa FC,Saltillo Soccer FC,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_895708447,comp_153661,La Tribu de Ciudad Juarez,Santiago FC,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_377128533,comp_6981,Universitario,Melgar,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
-mt_986401218,comp_4795,São Paulo,Vitória,1.07,,DESCARTADO,R1 xG HT 1.62/0.53 <= 1.45
+mt_649484562,comp_29906,ASO Chlef,MC Alger,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_378442325,comp_3498,Sabah FK,SK Slavia Praha,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_512993522,comp_3498,RC Lens,Sporting,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_895609503,comp_5432,Al-Sadd,Al-Hilal,,,DESCARTADO,R1 xG HT nan/nan <= 1.45
+mt_981428619,comp_8833,Al Seeb,Al Hussein Irbid,,,DESCARTADO,R1 xG HT nan/nan <= 1.45

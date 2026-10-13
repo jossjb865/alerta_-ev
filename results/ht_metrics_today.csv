@@ -1,6 +1,3 @@
 match_id,date,competition_id,season_id,status,utc_date,home_id,home_name,away_id,away_name,competition_name,home_matches_sample,home_xG_HT,home_xGA_HT,home_Shots_On_Target_HT_For,home_Shots_On_Target_HT_Against,home_Over_0.5_HT_Pct,away_matches_sample,away_xG_HT,away_xGA_HT,away_Shots_On_Target_HT_For,away_Shots_On_Target_HT_Against,away_Over_0.5_HT_Pct
-mt_649484562,2026-10-13T16:45:00.000Z,comp_29906,sn_4510099,scheduled,2026-10-13T16:45:00.000Z,tm_280233,ASO Chlef,tm_092072,MC Alger,,0.0,,,,,,0.0,,,,,
-mt_378442325,2026-10-13T16:45:00.000Z,comp_3498,sn_8406903,scheduled,2026-10-13T16:45:00.000Z,tm_8557956,Sabah FK,tm_64842,SK Slavia Praha,,2.0,,,2.5,3.0,,0.0,,,,,
-mt_512993522,2026-10-13T16:45:00.000Z,comp_3498,sn_8406903,scheduled,2026-10-13T16:45:00.000Z,tm_83394,RC Lens,tm_26936,Sporting,,0.0,,,,,,0.0,,,,,
-mt_895609503,2026-10-13T16:00:00.000Z,comp_5432,sn_3020530,scheduled,2026-10-13T16:00:00.000Z,tm_536229,Al-Sadd,tm_466902,Al-Hilal,,0.0,,,,,,0.0,,,,,
-mt_981428619,2026-10-13T16:00:00.000Z,comp_8833,sn_4582107,scheduled,2026-10-13T16:00:00.000Z,tm_0885475,Al Seeb,tm_0805909,Al Hussein Irbid,,0.0,,,,,,0.0,,,,,
+mt_987691660,2026-10-13T00:00:00.000Z,comp_1085,sn_1307939,finished,2026-10-13T00:00:00.000Z,tm_74037,Botafogo-SP,tm_25880,Ceará,,16.0,0.658,0.392,1.733,1.2,,16.0,0.313,0.782,1.062,3.0,
+mt_028974343,2026-10-13T00:00:00.000Z,comp_4795,sn_8459352,finished,2026-10-13T00:00:00.000Z,tm_74002,Red Bull Bragantino,tm_01988,Cruzeiro,,14.0,0.709,0.407,2.643,1.0,,14.0,0.484,0.849,2.643,2.786,
